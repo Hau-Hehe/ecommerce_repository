@@ -1,0 +1,19 @@
+package com.haune.ecommerce.repository;
+
+import com.haune.ecommerce.entity.UserReview;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface UserReviewRepository extends JpaRepository<UserReview, Long> {
+    @Query("SELECT ur FROM UserReview ur " +
+            "JOIN ur.orderedProduct ol " +
+            "WHERE ol.productItem.product.id = :productId")
+    List<UserReview> findByProductId(@Param("productId") Long productId);
+
+    boolean existsByUserIdAndOrderedProductId(Long userId, Long orderedProductId);
+}
